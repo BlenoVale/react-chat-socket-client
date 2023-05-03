@@ -66,7 +66,7 @@ align-items: center;
                 }
             }
 
-            .msg-area.right-side {
+            .msg-area.me {
                 align-items: flex-end;
             }
         }

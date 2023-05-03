@@ -2,18 +2,24 @@ import { useContext, useState } from 'react';
 import * as C from './styles';
 import { Context } from '../../context/Context';
 import { useNavigate } from 'react-router-dom';
+import { Socket } from 'socket.io-client';
+import { JoinRoom } from '../../helpers/socketHelper';
 
-export const Login = () => {
+type Props = {
+    socket: Socket;
+}
+export const Login = ({ socket }: Props) => {
     const { state, dispatch } = useContext(Context);
     const [name, setName] = useState('');
     const navigate = useNavigate();
 
     const handleEnterChat = () => {
-        if (name !== '') {
+        if (name.trim() !== '') {
             dispatch({
                 type: 'SET_NAME',
                 payload: { name }
             });
+            JoinRoom(socket);
             navigate('/chat');
         } else {
             alert('Digite o seu Nome para prosseguir.')

@@ -1,29 +1,15 @@
-import { useEffect, useState } from 'react'
-import io from 'socket.io-client';
+import { useContext, useEffect, useState } from 'react'
 import { Router } from './router';
 import { Context, ContextProvider } from './context/Context';
+import io from 'socket.io-client';
 
 const socket = io("http://localhost:3001");
 
 function App() {
-  const [userName, setUserName] = useState('');
-  const [userList, setUserList] = useState([]);
-  const [message, setMessage] = useState('');
-  const [messageReceived, setMessageReceived] = useState('');
-
-  const sendMessage = () => {
-    socket.emit("send_message", { message });
-  }
-
-  useEffect(() => {
-    socket.on("receive_message", (data) => {
-      setMessageReceived(data.message);
-    });
-  }, [socket]);
 
   return (
     <ContextProvider>
-      <Router />
+      <Router socket={socket}/>
     </ContextProvider>
   );
 }
