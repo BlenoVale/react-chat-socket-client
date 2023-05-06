@@ -11,28 +11,35 @@ type Props = {
 export const Chat = ({ socket }: Props) => {
     const { state } = useContext(Context);
     const [currentMessage, setCurrentMessage] = useState('');
+    const [connectedUserList, setConnectedUserList] = useState([]);
     const [messageList, setMessageList] = useState<MessageType[]>([]);
 
     useEffect(() => {
+        console.log('testando');
         socket.on("receive_message", (data) => {
             setMessageList((list) => [...list, data as MessageType]);
         });
 
-        /*let receivedMsg = receiveMessage(socket);
-        setMessageList((list) => [...list, receivedMsg]);
-        console.log(messageList);*/
+        socket.on('list-update', (data) => {
+            let listWithoutSender = data.list.filter((item: string) => { return item != state.user.name });
+            setConnectedUserList(listWithoutSender);
+        });
     }, [socket]);
 
     const handleSendMessage = async () => {
-        const messageData = {
-            room: 1,
-            author: state.user.name,
-            message: currentMessage,
-            time: new Date(Date.now()).getHours() + ":" + new Date(Date.now()).getMinutes()
-        };
+        if (currentMessage.trim() !== '') {
+            const messageData: MessageType = {
+                room: 1,
+                author: state.user.name,
+                message: currentMessage,
+                time: new Date(Date.now()).getHours() + ":" + new Date(Date.now()).getMinutes()
+            };
 
-        await sendMessage(socket, messageData);
-        setMessageList((list) => [...list, messageData]);
+            await sendMessage(socket, messageData);
+            setMessageList((list) => [...list, messageData]);
+        }
+
+        setCurrentMessage('');
     }
 
     const identifyMyMsg = (name: string) => {
@@ -59,22 +66,25 @@ export const Chat = ({ socket }: Props) => {
                             </div>
                         ))}
                     </div>
+
                     <div className='chat-list-users'>
-                        <div className='userName me'>Bleno</div>
-                        <div className='userName'>User 2</div>
-                        <div className='userName'>User 3</div>
+                        <div className={`userName me`}>{state.user.name}</div>
+                        {connectedUserList.map((name, key) => (
+                            <div className={`userName`} key={key}>{name}</div>
+                        ))}
                     </div>
                 </div>
 
                 <div className='chat-input-box'>
                     <input
                         type='text'
+                        value={currentMessage}
                         placeholder='Digite a sua mensagem...'
                         onChange={e => setCurrentMessage(e.target.value)}
                         onKeyDown={e => e.key === 'Enter' && handleSendMessage()} />
                     <button onClick={handleSendMessage}>Enviar</button>
                 </div>
             </div>
-        </C.Container>
+        </C.Container >
     );
 }

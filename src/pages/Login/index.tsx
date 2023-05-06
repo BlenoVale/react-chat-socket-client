@@ -9,7 +9,7 @@ type Props = {
     socket: Socket;
 }
 export const Login = ({ socket }: Props) => {
-    const { state, dispatch } = useContext(Context);
+    const { dispatch } = useContext(Context);
     const [name, setName] = useState('');
     const navigate = useNavigate();
 
@@ -19,7 +19,7 @@ export const Login = ({ socket }: Props) => {
                 type: 'SET_NAME',
                 payload: { name }
             });
-            JoinRoom(socket);
+            JoinRoom(socket, name);
             navigate('/chat');
         } else {
             alert('Digite o seu Nome para prosseguir.')
@@ -31,7 +31,12 @@ export const Login = ({ socket }: Props) => {
             <div className='login-area'>
                 <h1>Por favor, digite o seu nome para continuar.</h1>
                 <div className='login-input-area'>
-                    <input type='text' value={name} onChange={e => setName(e.target.value)} />
+                    <input className='nameInput'
+                        type='text'
+                        value={name}
+                        onChange={e => setName(e.target.value)}
+                        placeholder='Digite seu Nome...'
+                    />
                     <button onClick={handleEnterChat}>ENTRAR</button>
                 </div>
             </div>

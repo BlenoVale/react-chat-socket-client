@@ -48,9 +48,10 @@ align-items: center;
 
                 .userName {
                     width: fit-content;
-                    padding: 5px 10px;
+                    padding: 3px 6px;
                     background-color: #c5c6c8;
                     border-radius: 5px;
+                    font-size: 13px;
                 }
                 .msg {
                     width: fit-content;

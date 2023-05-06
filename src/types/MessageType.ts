@@ -6,7 +6,7 @@ export type MessageType = {
 
 }
 
-export const initialMessage = {
+export const initialMessage: MessageType = {
     room: 0,
     author: '',
     message: '',

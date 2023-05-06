@@ -13,8 +13,7 @@ align-items: center;
     gap: 10px;
     margin: 30px 0;
 
-    input {
-        flex: 1;
+    input {        
         outline: none;
         border: none;
         border-radius: 5px;
@@ -22,6 +21,14 @@ align-items: center;
         background-color: #ddd;
         padding: 10px 20px;
         font-size: 20px;
+    }
+
+    .nameInput {
+        flex: 1;
+    }
+
+    .roomInput {
+        width: 170px;
     }
 
     button {

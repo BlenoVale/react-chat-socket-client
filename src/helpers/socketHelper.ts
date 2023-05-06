@@ -1,19 +1,21 @@
 import { Socket } from "socket.io-client";
 import { MessageType, initialMessage } from "../types/MessageType";
 
-export const JoinRoom = (socket: Socket) => {
-    socket.emit("join_room", 1);
+export const JoinRoom = (socket: Socket, name: string) => {
+    let userData = { room: 1, userName: name }
+    socket.emit("join_room", userData);
 }
 
 export const sendMessage = async (socket: Socket, messageData: Object) => {
     await socket.emit("send_message", messageData);
 }
 
-export const receiveMessage = (socket: Socket) => {
-    let receivedMsg: MessageType = initialMessage;
+type Props = {
+    socket: Socket,
+    setMessageList: () => void
+}
+export const receiveMessage = ({ socket, setMessageList }: Props) => {
     socket.on("receive_message", (data) => {
-        console.log(receivedMsg);
-        receivedMsg = data as MessageType;
+        //setMessageList((list) => [...list, data as MessageType]);
     });
-    return receivedMsg;
 }
